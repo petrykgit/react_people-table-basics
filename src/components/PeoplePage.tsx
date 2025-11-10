@@ -10,9 +10,6 @@ export const PeoplePage = () => {
   const [people, setPeople] = useState<Person[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [selectedPersonName, setSelectedPersonName] = useState<string | null>(
-    null,
-  );
   const { slug } = useParams<{ slug?: string }>();
 
   const getPersonDataForLink = (
@@ -40,10 +37,6 @@ export const PeoplePage = () => {
   }, []);
 
   const isNoPeople = people.length < 1;
-
-  const handlePersonSelect = (person: Person) => {
-    setSelectedPersonName(person.name);
-  };
 
   return (
     <div className="block">
@@ -79,8 +72,7 @@ export const PeoplePage = () => {
                 const isFemale = person.sex === 'f';
                 const mother = getPersonDataForLink(person.motherName, people);
                 const father = getPersonDataForLink(person.fatherName, people);
-                const isSelected =
-                  person.name === selectedPersonName || person.slug === slug;
+                const isSelected = person.slug === slug;
 
                 return (
                   <tr
@@ -93,7 +85,6 @@ export const PeoplePage = () => {
                     <td>
                       <PersonLink
                         person={person}
-                        onSelect={handlePersonSelect}
                         className={classNames({
                           'has-text-danger': isFemale,
                         })}
@@ -106,7 +97,6 @@ export const PeoplePage = () => {
                       {mother ? (
                         <PersonLink
                           person={mother}
-                          onSelect={handlePersonSelect}
                           className="has-text-danger"
                         />
                       ) : (
@@ -115,10 +105,7 @@ export const PeoplePage = () => {
                     </td>
                     <td>
                       {father ? (
-                        <PersonLink
-                          person={father}
-                          onSelect={handlePersonSelect}
-                        />
+                        <PersonLink person={father} />
                       ) : (
                         person.fatherName || '-'
                       )}

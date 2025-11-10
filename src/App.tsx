@@ -1,5 +1,3 @@
-// import { Loader } from './components/Loader';
-
 import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import './App.scss';
 import classNames from 'classnames';
