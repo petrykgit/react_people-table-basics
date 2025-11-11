@@ -1,17 +1,23 @@
 import { Loader } from './Loader';
-import { useEffect, useState } from 'react';
-import { getPeople } from '../api';
 import { Person } from '../types';
 import classNames from 'classnames';
 import { PersonLink } from './PersonLink';
-import { useParams } from 'react-router-dom';
 
-export const PeopleTable = () => {
-  const [people, setPeople] = useState<Person[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const { slug } = useParams<{ slug?: string }>();
+interface PeopleTableProps {
+  isLoading: boolean;
+  isError: boolean;
+  isNoPeople: boolean;
+  people: Person[];
+  slug?: string;
+}
 
+export const PeopleTable: React.FC<PeopleTableProps> = ({
+  isLoading,
+  isError,
+  isNoPeople,
+  people,
+  slug,
+}) => {
   const getPersonDataForLink = (
     name: string | null,
     allPeople: Person[],
@@ -24,19 +30,6 @@ export const PeopleTable = () => {
 
     return foundPerson || null;
   };
-
-  useEffect(() => {
-    setIsError(false);
-    setIsLoading(true);
-    getPeople()
-      .then(setPeople)
-      .catch(() => {
-        setIsError(true);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  const isNoPeople = people.length < 1;
 
   return (
     <>
